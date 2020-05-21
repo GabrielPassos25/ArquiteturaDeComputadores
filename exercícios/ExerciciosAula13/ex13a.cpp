@@ -100,36 +100,20 @@ microcode microprog[512];
 //Escreve um microprograma de controle na memória de controle (array microprog, declarado logo acima)
 void load_microprog()
 {
-    //FILE *microprograma;
-	//microprograma = fopen("microprog.rom", "rb");
+    FILE *microprograma;
+	microprograma = fopen("microprog.rom", "rb");
 
-	//if (microprograma != NULL) {
-		//fread(armazenamento, sizeof(microinstrucao), 512, microprograma);
-		//fclose(microprograma);
-
-	//}
-    microprog[0] =  0b000000000100001101010000001000010001; //PC <-PC+1;fetch; GOTO[MBR]
-    microprog[1] =  0b000000010000001101010000001000010001; //PC <- PC+1; fetch; GOTO[2]
-    microprog[2] =  0b000000011000000101001000000000000010; //H <- MBR; GOTO[3]
-    microprog[3] =  0b000000100000001101010000001000010001; //PC <- PC+1; fetch; GOTO[4]
-    microprog[4] =  0b000000101000000101000100000000000010; //OPC <- MBR;GOTO[5]
-    microprog[5] =  0b000000110000001111000000000100000010; //MDR <-H + MBR;GOTO[6]
-    microprog[6] =  0b000000111000000101000100000000000001; //OPC <- PC;
-    microprog[7] =  0b000001000000001101100100000000001000; //OPC <- OPC-1;
-    microprog[8] =  0b000001001000101101100100000000001000; //OPC <- OPC-1; shift pra direita
-    microprog[9] =  0b000001010000100101000100000000001000; //OPC; shift pra direita;
-    microprog[10] = 0b000000000000000101000000000011001000; //MAR <- OPC; write; GOTO MAIN;
+	if (microprograma != NULL) {
+		fread(microprog, sizeof(microprog), 512, microprograma);
+		fclose(microprograma);
+	}
 }
+
 
 //carrega programa na memória principal para ser executado pelo emulador.
 //programa escrito em linguagem de máquina (binário) direto na memória principal (array memory declarado mais acima).
 void load_prog()
 {
-    memory[0] = 0b00000000;
-    memory[4] = 0b00000001;
-    memory[5] = 0b00000100;
-    memory[6] = 0b00000101;
-    
 }
 
 //exibe estado da máquina
@@ -241,10 +225,10 @@ void alu(byte func, word a, word b)
 void shift(byte s, word w)
 {
     if(s & 0b01){
-        bus_c = w << 8;
+        bus_c = w >> 1;
     }
     if(s & 0b10){
-        bus_c = w >> 1;
+        bus_c = w << 8;
     }
 }
 
@@ -392,8 +376,8 @@ int main(int argc, char* argv[])
         alu(decmcode.alu, h, bus_b);
 
         //implementar! Executa deslocamento
-        bus_c = alu_out;
         shift(decmcode.sft, alu_out);
+        bus_c = alu_out;
         //implementar! Escreve registradores
         write_register(decmcode.reg_w);
 

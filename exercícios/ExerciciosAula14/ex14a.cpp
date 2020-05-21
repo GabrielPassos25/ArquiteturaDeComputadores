@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <fstream>
 #include <cstring>
@@ -100,36 +101,67 @@ microcode microprog[512];
 //Escreve um microprograma de controle na memória de controle (array microprog, declarado logo acima)
 void load_microprog()
 {
-    //FILE *microprograma;
-	//microprograma = fopen("microprog.rom", "rb");
+    FILE *microprograma;
+	microprograma = fopen("microprog.rom", "rb");
 
-	//if (microprograma != NULL) {
-		//fread(armazenamento, sizeof(microinstrucao), 512, microprograma);
-		//fclose(microprograma);
-
-	//}
-    microprog[0] =  0b000000000100001101010000001000010001; //PC <-PC+1;fetch; GOTO[MBR]
-    microprog[1] =  0b000000010000001101010000001000010001; //PC <- PC+1; fetch; GOTO[2]
-    microprog[2] =  0b000000011000000101001000000000000010; //H <- MBR; GOTO[3]
-    microprog[3] =  0b000000100000001101010000001000010001; //PC <- PC+1; fetch; GOTO[4]
-    microprog[4] =  0b000000101000000101000100000000000010; //OPC <- MBR;GOTO[5]
-    microprog[5] =  0b000000110000001111000000000100000010; //MDR <-H + MBR;GOTO[6]
-    microprog[6] =  0b000000111000000101000100000000000001; //OPC <- PC;
-    microprog[7] =  0b000001000000001101100100000000001000; //OPC <- OPC-1;
-    microprog[8] =  0b000001001000101101100100000000001000; //OPC <- OPC-1; shift pra direita
-    microprog[9] =  0b000001010000100101000100000000001000; //OPC; shift pra direita;
-    microprog[10] = 0b000000000000000101000000000011001000; //MAR <- OPC; write; GOTO MAIN;
+	if (microprograma != NULL) {
+		fread(microprog, sizeof(microprog), 512, microprograma);
+		fclose(microprograma);
+	}
 }
+
 
 //carrega programa na memória principal para ser executado pelo emulador.
 //programa escrito em linguagem de máquina (binário) direto na memória principal (array memory declarado mais acima).
 void load_prog()
 {
-    memory[0] = 0b00000000;
-    memory[4] = 0b00000001;
-    memory[5] = 0b00000100;
-    memory[6] = 0b00000101;
-    
+    //Início carregamento IJVM
+
+    byte num_of_vars = 2;
+    memory[1] = 0x73; //init (bytes 2 e 3 são descartados por conveniência de implementação)
+
+    memory[4] = 0x0006; //(CPP inicia com o valor 0x0006 guardado na palavra 1 – bytes 4 a 7.)
+
+    word tmp = 0x1001; //LV 
+
+    memcpy(&(memory[8]), &tmp, 4); //(LV inicia com o valor de tmp guardado na palavra 2 – bytes 8 a 11)
+
+    tmp = 0x0400; //PC
+
+    memcpy(&(memory[12]), &tmp, 4); //(PC inicia com o valor de tmp guardado na palavra 3 – bytes 12 a 15)
+
+    tmp = 0x1001 + num_of_vars; //SP
+    //SP (Stack Pointer) é o ponteiro para o topo da pilha. 
+    //A base da pilha é LV e ela já começa com algumas variáveis empilhadas (dependendo do programa).
+    //Cada variável gasta uma palavra de memória. Por isso a soma de LV com num_of_vars.
+    memcpy(&(memory[16]), &tmp, 4); //(SP inicia com o valor de tmp guardado na palavra 4 – bytes 16 a 19)
+    //Fim carregamento IJVM
+
+    //Resolução do exercício
+    memory[1025] = 0x19;
+    memory[1026] = 0x15;
+    memory[1027] = 0x22;
+    memory[1028] = 0x00;
+    memory[1029] = 0x19;
+    memory[1030] = 0x0C;
+    memory[1031] = 0x19;
+    memory[1032] = 0x03;
+    memory[1033] = 0x02;
+    memory[1034] = 0x22;
+    memory[1035] = 0x01;
+    memory[1036] = 0x1C;
+    memory[1037] = 0x01;
+    memory[1038] = 0x1C;
+    memory[1039] = 0x00;
+    memory[1040] = 0x4B;
+    memory[1041] = 0x00;
+    memory[1042] = 0x08;
+    memory[1043] = 0x1C;
+    memory[1044] = 0x01;
+    memory[1045] = 0x3C;
+    memory[1046] = 0xFF;
+    memory[1047] = 0xF2;
+    memory[1048] = 0x01;
 }
 
 //exibe estado da máquina

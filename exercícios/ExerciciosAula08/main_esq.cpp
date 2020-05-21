@@ -100,20 +100,14 @@ microcode microprog[512];
 //Escreve um microprograma de controle na memória de controle (array microprog, declarado logo acima)
 void load_microprog()
 {
-    FILE *microprograma;
-	microprograma = fopen("microprog.rom", "rb");
-
-	if (microprograma != NULL) {
-		//fread(armazenamento, sizeof(microinstrucao), 512, microprograma);
-		//fclose(microprograma);
-
-	}
+    //implementar
 }
 
 //carrega programa na memória principal para ser executado pelo emulador.
 //programa escrito em linguagem de máquina (binário) direto na memória principal (array memory declarado mais acima).
 void load_prog()
 {
+    //implementar
 }
 
 //exibe estado da máquina

@@ -108,28 +108,66 @@ void load_microprog()
 		//fclose(microprograma);
 
 	//}
-    microprog[0] =  0b000000000100001101010000001000010001; //PC <-PC+1;fetch; GOTO[MBR]
-    microprog[1] =  0b000000010000001101010000001000010001; //PC <- PC+1; fetch; GOTO[2]
-    microprog[2] =  0b000000011000000101001000000000000010; //H <- MBR; GOTO[3]
-    microprog[3] =  0b000000100000001101010000001000010001; //PC <- PC+1; fetch; GOTO[4]
-    microprog[4] =  0b000000101000000101000100000000000010; //OPC <- MBR;GOTO[5]
-    microprog[5] =  0b000000110000001111000000000100000010; //MDR <-H + MBR;GOTO[6]
-    microprog[6] =  0b000000111000000101000100000000000001; //OPC <- PC;
-    microprog[7] =  0b000001000000001101100100000000001000; //OPC <- OPC-1;
-    microprog[8] =  0b000001001000101101100100000000001000; //OPC <- OPC-1; shift pra direita
-    microprog[9] =  0b000001010000100101000100000000001000; //OPC; shift pra direita;
-    microprog[10] = 0b000000000000000101000000000011001000; //MAR <- OPC; write; GOTO MAIN;
+    
+    //MAIN //memory[1][3][5]
+    microprog[0] = 0b000000000100001101010000001000010001; //PC <- PC + 1; fetch; GOTO MBR;
+
+    //OPC = OPC + memory[end_word]; memory[2][4][40][44] 
+    microprog[2] = 0b000000011000001101010000001000010001; //PC <- PC + 1; fetch;
+    microprog[3] = 0b000000100000000101000000000010100010; //MAR <- MBR; read;
+    microprog[4] = 0b000000101000000101001000000000000000; //H <- MDR;
+    microprog[5] = 0b000000000000001111000100000000001000; //OPC <- OPC + H; GOTO MAIN; OPC = 5; M[1] = 1; m[2] = 4; OPC =3; m[1]=0; m[3]=2 
+
+    //memory[end_word] = OPC; memory[6][48]
+    microprog[6] = 0b000000111000001101010000001000010001; //PC <- PC + 1; fetch;
+    microprog[7] = 0b000001000000000101000000000010000010; //MAR <- MBR;
+    microprog[8] = 0b000000000000000101000000000101001000; //MDR <- OPC; write; GOTO MAIN;
+
+    //goto endereco_comando_programa;
+    microprog[9]  = 0b000001010000001101010000001000010001; //PC <- PC + 1; fetch;
+    microprog[10] = 0b000000000100000101000000001000010010; //PC <- MBR; fetch; GOTO MBR;
+
+    //if OPC = 0 goto endereco_comando_programa else goto proxima_linha;
+    microprog[11]  = 0b000001100001000101000100000000001000; //OPC <- OPC; IF ALU = 0 GOTO 268 (100001100)							                ELSE GOTO 12 (000001100);
+    microprog[12]  = 0b000000000000001101010000001000000001; //PC <- PC + 1; GOTO MAIN;
+    microprog[268] = 0b100001101000001101010000001000010001; //PC <- PC + 1; fetch;
+    microprog[269] = 0b000000000100000101000000001000010010; //PC <- MBR; fetch; GOTO MBR;
+
+    //OPC = OPC - memory[end_word];
+    microprog[13] = 0b000001110000001101010000001000010001; //PC <- PC + 1; fetch;
+    microprog[14] = 0b000001111000000101000000000010100010; //MAR <- MBR; read;
+    microprog[15] = 0b000010000000000101001000000000000000; //H <- MDR;
+    microprog[16] = 0b000000000000001111110100000000001000; //OPC <- OPC - H; GOTO MAIN;
 }
 
 //carrega programa na memória principal para ser executado pelo emulador.
 //programa escrito em linguagem de máquina (binário) direto na memória principal (array memory declarado mais acima).
 void load_prog()
 {
-    memory[0] = 0b00000000;
-    memory[4] = 0b00000001;
-    memory[5] = 0b00000100;
-    memory[6] = 0b00000101;
-    
+    memory[1] = 0b00000010; //main (opc=y) //ADD OPC, [10]
+    memory[2] = 0b00001010; //atribuir y para opc
+    memory[3] = 0b00001011; //main(checar se y=0) //JZ
+    memory[4] = 0b11111111; //se y=0
+    memory[5] = 0b00001101; //main (decrementar y) //SUB OPC, [13]
+    memory[6] = 0b00001101; //decrementar 1
+    memory[7] = 0b00000110; //main (salvar y) // MOV OPC, [10]
+    memory[8] = 0b00001010; //posicao de y
+    memory[9] = 0b00001101; //main (zerar opc) //SUB OPC, [10]
+    memory[10] = 0b00001010; //posicao de y
+    memory[11] = 0b00000010; //main (somar com constante) // ADD OPC, [11]
+    memory[12] = 0b00001011; //atribuir constante para opc
+    memory[13] = 0b00000010; //main (somar com x) //ADD OPC, [12]
+    memory[14] = 0b00001100; //somar constante + x
+    memory[15] = 0b00000110; //main (salvar resultado) //MOV OPC, [11]
+    memory[16] = 0b00001011; //posicao da constante
+    memory[17] = 0b00001101; //main (zerar opc) //SUB OPC, [11]
+    memory[18] = 0b00001011; //posicao de constante
+    memory[19] = 0b00001001; //main (loop do programa) //GOTO 1
+    memory[20] = 0b00000001; //PC=1, goto[2]
+    memory[40] = 0b00000010; //y=3
+    memory[44] = 0b00000000; //constante e resultado ao final
+    memory[48] = 0b00000101; //x=5
+    memory[52] = 0b00000001; //decremento
 }
 
 //exibe estado da máquina
@@ -241,10 +279,10 @@ void alu(byte func, word a, word b)
 void shift(byte s, word w)
 {
     if(s & 0b01){
-        bus_c = w << 8;
+        bus_c = w >> 1;
     }
     if(s & 0b10){
-        bus_c = w >> 1;
+        bus_c = w << 8;
     }
 }
 
@@ -392,8 +430,8 @@ int main(int argc, char* argv[])
         alu(decmcode.alu, h, bus_b);
 
         //implementar! Executa deslocamento
-        bus_c = alu_out;
         shift(decmcode.sft, alu_out);
+        bus_c = alu_out;
         //implementar! Escreve registradores
         write_register(decmcode.reg_w);
 
