@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <fstream>
 #include <cstring>
@@ -115,15 +114,17 @@ void load_microprog()
 //programa escrito em linguagem de máquina (binário) direto na memória principal (array memory declarado mais acima).
 void load_prog()
 {
-    FILE *f = fopen("a.exe", "rb");
-    word Q;
-    fread(&Q, sizeof(word), 1, f);
-    fread(&memory[0], sizeof(byte), 20, f);
-    word pc;
-    memcpy(&pc, memory + 12, 4);
-    fread(memory + pc + 1, sizeof(byte), Q-20, f);
-
-    fclose(f);
+    FILE *prog;
+    prog = fopen("prog.exe", "rb");
+    
+    if(prog!= NULL){ 
+        word Q;word pc;
+        fread(&Q, sizeof(word), 1, prog);
+        fread(&memory[0], sizeof(byte), 20, prog);
+        memcpy(&pc, memory + 12, 4);
+        fread(memory + pc + 1, sizeof(byte), Q-20, prog);
+        fclose(prog);
+    }
 }
 
 //exibe estado da máquina
@@ -390,8 +391,10 @@ int main(int argc, char* argv[])
         //implementar! Executa alu
         alu(decmcode.alu, h, bus_b);
 
-        //implementar! Executa deslocamento
+        //Caso não ocorra shift
         bus_c = alu_out;
+
+        //implementar! Executa deslocamento
         shift(decmcode.sft, alu_out);
         //implementar! Escreve registradores
         write_register(decmcode.reg_w);

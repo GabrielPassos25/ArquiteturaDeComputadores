@@ -9,7 +9,7 @@ dicionario_instrucoes = {'nop':[0x01,[]],'iadd':[0x02, []],'isub':[0x05, []],'ia
 marcadores = {}
 variaveis = {}
 byte = []
-
+programa_assembly = []
 byte_execucao = 0
 linhas = 0
 quant_variaveis = 0
@@ -24,6 +24,7 @@ def main():
         return 0
     for linha in txt:
         linhas +=1
+        programa_assembly.append(linha)
         conteudo = linha.lower().split()
         #Checar se a palavra é um marcador válido
         if(marcador(conteudo[0])):
@@ -54,7 +55,7 @@ def marcador(marcador):
 
 
 def operador(constantes, num_constantes, operando):
-    global variaveis, byte, byte_execucao, quant_variaveis
+    global variaveis, byte, byte_execucao, quant_variaveis, marcadores
     if(num_constantes == 0):
         condicao = True
     else:
@@ -69,9 +70,12 @@ def operador(constantes, num_constantes, operando):
             elif(constantes[i] == 'byte') or (constantes[i] == 'const') or (constantes[i] == 'disp') or (constantes[i] == 'index'):
                 if(not operando[i].isnumeric()):
                     condicao = False
-            else:
-                if(not operando[i] in marcadores):
-                    condicao = False
+            #Checagem feita no fim
+            #else:
+                #if(not operando[i] in marcadores):
+                    #print(marcadores)
+                    #print("offset invalido")
+                    #condicao = False
     if(condicao == False):
         return condicao
     #Adiciona o operador
@@ -117,6 +121,10 @@ def cabecalho(byte_execucao, output):
 def programa(byte,output,marcadores):
     for i in byte:
         if type(i) is list:
+            #Checar se os offsets existem
+            if(not i[0] in marcadores):
+                    print("offset", "\"",i[0], "\"", "inválido")
+                    return 0
             byte_marcador = (marcadores[i[0]] - i[1]) & 0xffff #Unsigned int 16 bits offset = 2bytes 
             output += byte_marcador.to_bytes(2,byteorder = 'big')
         else:
@@ -127,6 +135,18 @@ def escrita(output):
     program.write(output)
     program.close()
 
+def informacoes(output):
+    global marcadores, variaveis,programa_assembly
+    print("Marcadores:", marcadores)
+    print("Variáveis:", variaveis)
+    print("Tamanho do programa:", int(output[0]), "bytes")
+    print("Array de bytes:", end="[")
+    for i in range(0,len(output)-1):
+        print(hex(output[i]),end = ",")
+    print(i,end ="]\n")
+    print("Programa em assembly:", programa_assembly)
+    print("Vetor de bytes:", byte)
+
 def escrever():
     global byte_execucao, byte, linhas, marcadores
     output = bytearray()
@@ -135,7 +155,12 @@ def escrever():
     #inicialização
     inicializar(byte, quant_variaveis, output)
     #programa
-    programa(byte, output, marcadores)
+    if(programa(byte, output, marcadores) == 0):
+        return 0
     #escrita
     escrita(output)
+    #informações
+    informacoes(output)
+
+#Iniciaçização do programa
 main()
