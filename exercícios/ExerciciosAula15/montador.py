@@ -26,6 +26,9 @@ def main():
         linhas +=1
         programa_assembly.append(linha)
         conteudo = linha.lower().split()
+        #Caso linha seja vazia
+        if(len(conteudo)<=0):
+            continue
         #Checar se a palavra é um marcador válido
         if(marcador(conteudo[0])):
             del conteudo[0]

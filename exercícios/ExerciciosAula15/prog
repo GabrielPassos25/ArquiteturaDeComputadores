@@ -1,25 +1,6 @@
-bipush 20
-            istore a
-            bipush 2
-            istore b
-            bipush 0
-            istore resultado
-            iload a
-            istore resto
-            iload b
-            ifeq end_while
-while           iload a
-                ifeq end_while
-                iload a
-                iload b
-                isub
-                istore a
-                iload a
-                iflt end_while
-                iload a
-                istore resto
-                iinc resultado 1
-                goto while
-end_while   iload resto
-            iload resultado
-            nop
+bipush 12
+
+
+bipush 44
+
+iadd
