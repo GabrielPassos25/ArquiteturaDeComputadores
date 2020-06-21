@@ -139,40 +139,42 @@ void load_prog()
 
     //Resolução do exercício
     memory[1025] = 0x19; //BIPUSH 7
-    memory[1026] = 0x00; //valor do BIPUSH
-    memory[1027] = 0x22; //ISTORE X
-    memory[1028] = 0x00; //variável 0
-    memory[1029] = 0x19; //BIPUSH 7
-    memory[1030] = 0x07; //valor do BIPUSH
-    memory[1031] = 0x22; //ISTORE Y
-    memory[1032] = 0x01; //variável 1 (de incremento)
-    memory[1033] = 0x19; //BIPUSH 9
-    memory[1034] = 0x09; //valor do BIPUSH
-    memory[1035] = 0x22; //ISTORE Z
-    memory[1036] = 0x02; //variável 2 (de controle)
-    memory[1037] = 0x1C; //(rep) ILOAD Z 
-    memory[1038] = 0x02; //endereço de z
-    memory[1039] = 0x47; //IFEQ (comparar z com 0), se 0 -> fim
-    memory[1040] = 0x00; //endereço de fim
-    memory[1041] = 0xA4; //endereço de fim
-    memory[1042] = 0x1C; //ILOAD Z
-    memory[1043] = 0x02; //endereço de z
-    memory[1044] = 0x19; //BIPUSH 1
-    memory[1045] = 0x01; //valor do BIPUSH
-    memory[1046] = 0x05; //ISUB
-    memory[1047] = 0x22; //ISTORE Z
-    memory[1048] = 0x02; //endereço de z
-    memory[1049] = 0x1C; //ILOAD X
-    memory[1050] = 0x00; //endereço de x
-    memory[1051] = 0x1C; //ILOAD Y
-    memory[1052] = 0x01; //endereço de y
-    memory[1053] = 0x02; //IADD
-    memory[1054] = 0x22; //ISTORE X
-    memory[1055] = 0x00; //endereço de x
-    memory[1056] = 0x3C; //GOTO rep (13-30) = -17
-    memory[1057] = 0xFF; //endereço GOTO
-    memory[1058] = 0xED; //endereço GOTO
-    memory[1059] = 0x01; //fim
+memory[1026] = 0x00; //valor do BIPUSH
+memory[1027] = 0x22; //ISTORE X
+memory[1028] = 0x00; //variável 0
+memory[1029] = 0x19; //BIPUSH 7
+memory[1030] = 0x07; //valor do BIPUSH
+memory[1031] = 0x22; //ISTORE Y
+memory[1032] = 0x01; //variável 1 (de incremento)
+memory[1033] = 0x19; //BIPUSH 9
+memory[1034] = 0x09; //valor do BIPUSH
+memory[1035] = 0x22; //ISTORE Z
+memory[1036] = 0x02; //variável 2 (de controle)
+memory[1037] = 0x1C; //(rep) ILOAD Z
+memory[1038] = 0x02; //endereço de z
+memory[1039] = 0x47; //IFEQ (comparar z com 0), se 0 -> fim
+memory[1040] = 0x00; //endereço de fim
+memory[1041] = 0x14; //endereço de fim
+memory[1042] = 0x1C; //ILOAD Z
+memory[1043] = 0x02; //endereço de z
+memory[1044] = 0x19; //BIPUSH 1
+memory[1045] = 0x01; //valor do BIPUSH
+memory[1046] = 0x05; //ISUB
+memory[1047] = 0x22; //ISTORE Z
+memory[1048] = 0x02; //endereço de z
+memory[1049] = 0x1C; //ILOAD X
+memory[1050] = 0x00; //endereço de x
+memory[1051] = 0x1C; //ILOAD Y
+memory[1052] = 0x01; //endereço de y
+memory[1053] = 0x02; //IADD
+memory[1054] = 0x22; //ISTORE X
+memory[1055] = 0x00; //endereço de x
+memory[1056] = 0x3C; //GOTO rep (13-30) = -17
+memory[1057] = 0xFF; //endereço GOTO
+memory[1058] = 0xED; //endereço GOTO
+memory[1059] = 0x1C; //ILOAD X
+memory[1060] = 0x00; //endereço de X
+memory[1061] = 0x01; //fim
 }
 
 //exibe estado da máquina
@@ -270,12 +272,15 @@ void alu(byte func, word a, word b)
         case 0b110010: alu_out = -1;break;
         default: break;
     }
+    //se Z & JAMZ = 1(Z e JAMZ tem que ser 1), ele sofre o pulo condicional
     if(alu_out){
         z = 0;
     }
     else{
         z = 1;
     }
+    //se N & JAMN = 1(N e JAMZ tem que ser 1 e alu_out for negativa), ele sofre o pulo condicional
+    //ignora os 31 primeiros bits e compara com o ultimo (bit de sinal)
     n = (alu_out>>31) & 0b1;
 }
 
@@ -367,6 +372,7 @@ void mainmemory_io(byte control)
     //read
     if(control & 0b010){
         //Palavras de 4 bytes lida "pedaço" a "pedaço"
+        //lido de tras pra frente 1-2-3-4 -> 4 <<shift 3 <<shift 2 <<shift 1 = 4321
         word aux;
         aux = memory[mar*4+3];
         aux = aux << 8;
@@ -379,6 +385,8 @@ void mainmemory_io(byte control)
     }
     //write
     if(control & 0b100){
+        //Palavras de 4 bytes lida "pedaço" a "pedaço"
+        //lido normalmente  
         word aux = mdr;
         memory[mar*4] = aux;
         aux = aux >> 8;
