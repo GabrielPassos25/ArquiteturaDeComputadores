@@ -144,26 +144,26 @@ void load_microprog()
 //programa escrito em linguagem de máquina (binário) direto na memória principal (array memory declarado mais acima).
 void load_prog()
 {
-    memory[1] = 0b00000010; //main (opc=y) //ADD OPC, [10]
+    memory[1] = 0b00000010; //main (opc=y) -> ADD OPC, [10]
     memory[2] = 0b00001010; //atribuir y para opc
-    memory[3] = 0b00001011; //main(checar se y=0) //JZ
+    memory[3] = 0b00001011; //main(checar se y=0) -> JZ
     memory[4] = 0b11111111; //se y=0
-    memory[5] = 0b00001101; //main (decrementar y) //SUB OPC, [13]
+    memory[5] = 0b00001101; //main (decrementar y) -> SUB OPC, [13]
     memory[6] = 0b00001101; //decrementar 1
-    memory[7] = 0b00000110; //main (salvar y) // MOV OPC, [10]
+    memory[7] = 0b00000110; //main (salvar y) -> MOV OPC, [10]
     memory[8] = 0b00001010; //posicao de y
-    memory[9] = 0b00001101; //main (zerar opc) //SUB OPC, [10]
+    memory[9] = 0b00001101; //main (zerar opc) -> SUB OPC, [10]
     memory[10] = 0b00001010; //posicao de y
-    memory[11] = 0b00000010; //main (somar com constante) // ADD OPC, [11]
+    memory[11] = 0b00000010; //main (somar com constante) -> ADD OPC, [11]
     memory[12] = 0b00001011; //atribuir constante para opc
-    memory[13] = 0b00000010; //main (somar com x) //ADD OPC, [12]
+    memory[13] = 0b00000010; //main (somar com x) -> ADD OPC, [12]
     memory[14] = 0b00001100; //somar constante + x
-    memory[15] = 0b00000110; //main (salvar resultado) //MOV OPC, [11]
+    memory[15] = 0b00000110; //main (salvar resultado) -> MOV OPC, [11]
     memory[16] = 0b00001011; //posicao da constante
-    memory[17] = 0b00001101; //main (zerar opc) //SUB OPC, [11]
+    memory[17] = 0b00001101; //main (zerar opc) -> SUB OPC, [11]
     memory[18] = 0b00001011; //posicao de constante
-    memory[19] = 0b00001001; //main (loop do programa) //GOTO 1
-    memory[20] = 0b00000001; //PC=1, goto[2]
+    memory[19] = 0b00001001; //main (loop do programa) -> GOTO 1
+    memory[20] = 0b00000001; //PC=1, goto[2] -> GOTO 2
     memory[40] = 0b00000010; //y=3
     memory[44] = 0b00000000; //constante e resultado ao final
     memory[48] = 0b00000101; //x=5

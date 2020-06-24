@@ -124,6 +124,7 @@ void load_prog()
     memory[1] = 0b00000001; //IADD
     memory[2] = 0b00000011; //BIPUSH 3
     memory[3] = 0b00000101; //BIPUSH 5
+
 }
 
 //exibe estado da máquina

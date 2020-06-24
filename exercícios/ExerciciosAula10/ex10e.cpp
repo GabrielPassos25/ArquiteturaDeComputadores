@@ -236,6 +236,8 @@ void debug(bool clr = true)
     cout << ") \nOPC: " << opc << " ("; write_word(opc);
     cout << ") \nH  : " << h << " ("; write_word(h);
     cout << ")" << endl;
+        write_byte(memory[48]);
+    cout << memory[48] << endl;
 }
 
 decoded_microcode decode_microcode(microcode code) //Recebe uma microinstrução binária e separa suas partes preenchendo uma estrutura de microinstrucao decodificada, retornando-a.

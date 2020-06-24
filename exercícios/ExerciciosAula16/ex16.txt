@@ -1,0 +1,22 @@
+#Exercícios Aula 16
+a) 
+//Main
+[0] PC <- PC + 1; fetch; GOTO MBR;
+
+//ADD OPC, [END]       4 -> 3 passos
+[1] PC <- PC + 1; fetch;
+[2] MAR <- MBR; read;
+[3] OPC <- OPC + MDR; GOTO MAIN;
+
+//MOV OPC, [END]       Não existem mudanças
+//GOTO linha
+//JZ linha
+
+//SUB OPC, [END]       4 -> 3 passos
+[1] PC <- PC + 1; fetch;
+[2] MAR <- MBR; read;
+[3] OPC <- OPC - MDR; GOTO MAIN;
+
+b)
+Microinstrução padrão: 36 bits
+Microinstrução modificada: 40 bits (4 bits a mais -> decodificador 4 para 16 bits)

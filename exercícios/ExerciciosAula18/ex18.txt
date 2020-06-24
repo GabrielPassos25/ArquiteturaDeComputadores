@@ -1,0 +1,12 @@
+#Exercícios referente a aula 17
+1.a)
+    PS2: RISC
+    PS3: RISC
+    PS4: RISC
+    XBOX: CISC
+    XBOX 360: RISC
+    XBOX ONE: RISC
+
+b)
+    Está correto.
+    Considerando os bits menos significativos( 0 1 0 1 1 1 1 0 1 0 0 0 1 1 0 1 ) = 24.205 em decimal.

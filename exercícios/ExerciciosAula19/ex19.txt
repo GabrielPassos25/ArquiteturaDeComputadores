@@ -1,0 +1,29 @@
+#Exercícios aula 19
+1.a)
+Sintaxe Intel:
+    Utilizada para documentação da Plataforma x86, utilizada em larga
+    escala no sistema Windows.
+Sintaxe AT&T:
+    Utilizada no mundo Unix/Linux.
+
+Principais diferenças:
+
+AT&T)
+Ordem dos parâmetros: A instrução vem antes do destino;
+Tamanho dos parâmetros: São seguidos de letras para indicar o tamanho dos operandos
+Sintaxe: Prefixado com $ e os registradores com %
+Sintaxe geral: DISP (BASE, INDEX, SCALE)
+
+Intel)
+Ordem dos parâmetros: O destino vem antes da instrução;
+Tamanho dos parâmetros: Depende do tamanho dos nomes dos registradores usados
+Sintaxe: O montador automaticamente detecta o tipo dos símbolos, se são registradores, contantes ou marcadores, por exemplo
+Sintaxe geral: Usa variáveis que precisam ser utilizadas com colchetes, além de ser preciso explicitar o tipo, ex: "byte", "word", "dword"
+
+b)
+
+Montadores que utilizam Intel:
+-Microsoft Macro Assembler; Flat Aseembler
+
+Montadores que utilizam AT&T:
+-GAS, GCC

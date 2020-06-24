@@ -1,0 +1,10 @@
+#Exercícios referente a aula 17
+1.a)
+
+b)
+    Na arquitetura de computadores , um previsor de ramos é um circuito digital que tenta adivinhar o caminho que um ramo 
+    (por exemplo, if-then-else estrutura ) irá adiante isto é conhecido definitivamente.
+    O objetivo do previsor de ramos é melhorar o fluxo no duto instrução.
+    Preditores de filiais desempenham um papel fundamental na consecução eficaz elevado desempenho em muitos modernos pipeline microprocessador arquiteturas como x86.
+    Na arquitetura zen:
+        Melhoria da previsão de desvios usando um hash perceptron sistema com indireta matriz de destino semelhante ao microarquitetura Bobcat, algo que tem sido comparada a uma rede neural pelo engenheiro AMD Mike Clark.

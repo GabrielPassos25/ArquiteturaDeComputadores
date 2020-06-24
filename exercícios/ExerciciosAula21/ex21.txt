@@ -1,0 +1,27 @@
+#Exercício referente a aula 21
+3)
+Algumas instruções adicionais para realizar processamento de vetores (3DNow!):
+
+Instrução                   OP code
+ANDPS* xmm1, xmm2/m128 	    0F 54	
+ANDNPS* xmm1, xmm2/m128 	0F 55
+ORPS* xmm1, xmm2/m128 	    0F 56
+XORPS* xmm1, xmm2/m128 	    0F 57
+MOVUPS xmm1, xmm2/m128 	    0F 10
+MOVSS xmm1, xmm2/m32 	    F3 0F 10
+MOVUPS xmm2/m128, xmm1 	    0F 11
+MOVSS xmm2/m32, xmm1 	    F3 0F 11
+MOVLPS xmm, m64 	        0F 12
+MOVHLPS xmm1, xmm2 	        0F 12
+MOVLPS m64, xmm 	        0F 13
+UNPCKLPS xmm1, xmm2/m128 	0F 14
+UNPCKHPS xmm1, xmm2/m128 	0F 15
+MOVHPS xmm, m64 	        0F 16
+MOVLHPS xmm1, xmm2 	        0F 16
+MOVHPS m64, xmm 	        0F 17
+MOVAPS xmm1, xmm2/m128 	    0F 28
+MOVAPS xmm2/m128, xmm1 	    0F 29
+MOVNTPS m128, xmm1 	        0F 2B
+MOVMSKPS reg, xmm 	        0F 50
+CVTPI2PS xmm, mm/m64 	    0F 2A
+CVTSI2SS xmm, r/m32 	    F3 0F 2A

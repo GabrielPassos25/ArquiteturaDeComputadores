@@ -1,0 +1,5 @@
+#Exercício aula 20
+1.a)
+bipush -> Endereçamento Imediato
+iload -> Endereçamento Indexado
+goto -> Endereçamento Indexado

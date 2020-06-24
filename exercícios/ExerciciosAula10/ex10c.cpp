@@ -164,7 +164,7 @@ void load_prog()
     memory[18] = 0b00001011;
     memory[19] = 0b00001001;
     memory[20] = 0b00000001;
-    memory[40] = 0b00000010; //3
+    memory[40] = 0b00000011; //2
     memory[44] = 0b00000000; //constante e resultado ao final
     memory[48] = 0b00000101; //5
     memory[52] = 0b00000001; //decremento
@@ -225,6 +225,8 @@ void debug(bool clr = true)
     cout << ") \nOPC: " << opc << " ("; write_word(opc);
     cout << ") \nH  : " << h << " ("; write_word(h);
     cout << ")" << endl;
+    write_byte(memory[44]);
+    cout << memory[44] << endl;
 }
 
 decoded_microcode decode_microcode(microcode code) //Recebe uma microinstrução binária e separa suas partes preenchendo uma estrutura de microinstrucao decodificada, retornando-a.
