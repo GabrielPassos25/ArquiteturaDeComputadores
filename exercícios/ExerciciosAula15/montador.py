@@ -182,7 +182,7 @@ def escrever():
     #escrita
     escrita(output)
     #informações
-    informacoes(output)
+    #informacoes(output)
 
 #Iniciaçização do programa
 main()
